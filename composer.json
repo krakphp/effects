@@ -1,0 +1,19 @@
+{
+  "name": "krak/effects",
+  "description": "Safely manage side effects within your domain layer.",
+  "autoload": {
+    "psr-4": {
+      "Krak\\Effects\\": "src"
+    },
+    "files": ["src/effects.php"]
+  },
+  "require": {
+    "php": ">=7.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.3"
+  },
+  "scripts": {
+    "test": "phpunit --testdox --colors=always src"
+  }
+}
