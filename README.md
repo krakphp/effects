@@ -42,3 +42,12 @@ final class HandleCheckOutShoppingCart
 ## Installation
 
 Install with composer at `krak/effects`
+
+## Inspiration
+
+This design is inspired from the Elm language design around maintaining pure application code while leaving side effects to be managed by the runtime.
+
+Here are some other helpful resources around domain model purity and side effects:
+
+- [Side Effects in Elm](https://elmprogramming.com/side-effects.html)
+- [Domain model purity vs. domain model completeness](https://enterprisecraftsmanship.com/posts/domain-model-purity-completeness/)
