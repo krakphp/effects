@@ -5,9 +5,9 @@ namespace Krak\Effects;
 final class EffectsTest extends \PHPUnit\Framework\TestCase
 {
     /** @test */
-    public function can_raise_and_handle_effects() {
+    public function can_yield_and_handle_effects() {
         $sum = handleEffects((function() {
-            $result = raise(yield new Add(1, 2), Result::class);
+            $result = expect(Result::class, yield new Add(1, 2));
             return $result->value;
         })(), [
             Add::class => function(Add $add) {
@@ -22,7 +22,7 @@ final class EffectsTest extends \PHPUnit\Framework\TestCase
     public function unhandled_effects_by_default_will_throw_exception() {
         $this->expectExceptionMessage('No effect handler for effect Krak\Effects\Add.');
         $sum = handleEffects((function() {
-            $result = raise(yield new Add(1, 2), Result::class);
+            $result = expect(Result::class, yield new Add(1, 2));
             return $result->value;
         })(), []);
     }
@@ -30,7 +30,7 @@ final class EffectsTest extends \PHPUnit\Framework\TestCase
     /** @test */
     public function can_supply_a_default_effect_handler() {
         $sum = handleEffects((function() {
-            $result = raise(yield new Add(1, 2), Result::class);
+            $result = expect(Result::class, yield new Add(1, 2));
             return $result->value;
         })(), [], function () { return new Result(1); });
 
@@ -40,7 +40,7 @@ final class EffectsTest extends \PHPUnit\Framework\TestCase
     /** @test */
     public function write_only_effects_are_supported() {
         $sum = handleEffects((function() {
-            raise(yield new Add(1, 2));
+            yield new Add(1, 2);
             return 1;
         })(), [], function () {});
 
@@ -49,9 +49,9 @@ final class EffectsTest extends \PHPUnit\Framework\TestCase
 
     /** @test */
     public function invalid_return_messages_from_effect_handler_results_in_error() {
-        $this->expectExceptionMessage('Incorrect effect handler return value when Krak\Effects\Add was expected.');
+        $this->expectExceptionMessage('Expected a message of Krak\Effects\Add, but received an instance of Krak\Effects\Result. Make sure there is a yield keyword to raise the effect or that the effect handler is configured properly.');
         $sum = handleEffects((function() {
-            raise(yield new Add(1, 2), Add::class);
+            expect(Add::class, yield new Add(1, 2));
         })(), [], function () { return new Result(1); });
     }
 }
