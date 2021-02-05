@@ -63,6 +63,24 @@ final class EffectsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf(ErrorStatus::class, $status);
     }
+
+    /** @test */
+    public function nested_effects() {
+        $res = handleEffects((function() {
+            return (yield from $this->add(1, 2)) + (yield from $this->add(3, 4));
+        })(), [], function(Add $add) { return new Result(array_sum($add->values)); });
+        $this->assertEquals(14, $res);
+    }
+
+    private function add(int ...$values) {
+        return
+            expect(Result::class, yield new Add(...$values))->value
+            + (yield from $this->addOne(1));
+    }
+
+    private function addOne(int $value) {
+        return expect(Result::class, yield new Add($value, 1))->value;
+    }
 }
 
 final class Add {
