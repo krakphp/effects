@@ -1,1 +1,2 @@
 src/EffectsTest.php export-ignore
+src/Bridge/Result/MapEffectResultsTest.php
