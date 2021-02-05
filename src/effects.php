@@ -12,7 +12,7 @@ namespace Krak\Effects;
  * @return T
  */
 function expect(string $expectedMessageClass, object $returnedMessage): object {
-    if (get_class($returnedMessage) !== $expectedMessageClass) {
+    if (!is_a($returnedMessage, $expectedMessageClass) && !is_subclass_of($returnedMessage, $expectedMessageClass)) {
         throw new \RuntimeException('Expected a message of ' . $expectedMessageClass . ', but received an instance of ' . get_class($returnedMessage) . '. Make sure there is a yield keyword to raise the effect or that the effect handler is configured properly.');
     }
 

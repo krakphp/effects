@@ -54,6 +54,15 @@ final class EffectsTest extends \PHPUnit\Framework\TestCase
             expect(Add::class, yield new Add(1, 2));
         })(), [], function () { return new Result(1); });
     }
+
+    /** @test */
+    public function supports_parent_classes_in_returned_messages() {
+        $status = handleEffects((function() {
+            return expect(Status::class, yield new Add(1, 2));
+        })(), [], function() { return new ErrorStatus(); });
+
+        $this->assertInstanceOf(ErrorStatus::class, $status);
+    }
 }
 
 final class Add {
@@ -69,3 +78,6 @@ final class Result {
         $this->value = $value;
     }
 }
+
+abstract class Status {}
+final class ErrorStatus extends Status {}
